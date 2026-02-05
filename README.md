@@ -1,36 +1,172 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chandan Kumar - Full Stack Developer Portfolio
+
+A modern, interactive portfolio website built with Next.js, featuring 3D elements, theme switching, and stunning animated backgrounds.
+
+![Portfolio Preview](public/images/preview.png)
+
+## Features
+
+- **5 Dynamic Themes** - Cyber Cyan, Galaxy Purple, Matrix Green, Sunset Orange, Neon Pink
+- **Animated Backgrounds** - Each theme has a unique canvas-based animation (Matrix rain, starfield, code streams, etc.)
+- **3D Elements** - Three.js powered floating shapes and particle effects
+- **Responsive Design** - Fully responsive across all devices
+- **Smooth Animations** - Framer Motion powered transitions
+- **Glass Morphism UI** - Modern glassmorphism design elements
+- **Interactive Components** - Hover effects, typewriter text, and more
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **Animations**: Framer Motion
+- **3D Graphics**: Three.js + React Three Fiber
+- **Icons**: Heroicons
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ installed
+- npm or yarn package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:cmschandan/portfolio_chandan_fullstack.git
+   cd portfolio_chandan_fullstack
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. **Open in browser**
+
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+### Build for Production
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run start
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Option 1: Deploy via Vercel Dashboard (Recommended)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Push your code to GitHub** (if not already done)
+
+2. **Go to Vercel**
+   - Visit [vercel.com](https://vercel.com)
+   - Sign in with your GitHub account
+
+3. **Import Project**
+   - Click "Add New" → "Project"
+   - Select your GitHub repository: `portfolio_chandan_fullstack`
+   - Click "Import"
+
+4. **Configure Project**
+   - Framework Preset: Next.js (auto-detected)
+   - Root Directory: `./` (default)
+   - Build Command: `npm run build` (default)
+   - Output Directory: `.next` (default)
+
+5. **Deploy**
+   - Click "Deploy"
+   - Wait for build to complete
+   - Your site will be live at `https://your-project.vercel.app`
+
+### Option 2: Deploy via Vercel CLI
+
+1. **Install Vercel CLI**
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Login to Vercel**
+   ```bash
+   vercel login
+   ```
+
+3. **Deploy**
+   ```bash
+   # For preview deployment
+   vercel
+
+   # For production deployment
+   vercel --prod
+   ```
+
+### Custom Domain (Optional)
+
+1. Go to your project on Vercel Dashboard
+2. Navigate to "Settings" → "Domains"
+3. Add your custom domain
+4. Update DNS records as instructed
+
+## Project Structure
+
+```
+├── public/
+│   ├── images/           # Static images
+│   └── ChandanKumar.pdf  # Resume file
+├── src/
+│   ├── app/              # Next.js app router
+│   ├── components/       # React components
+│   │   ├── 3d/          # Three.js components
+│   │   ├── sections/    # Page sections
+│   │   └── ui/          # UI components
+│   ├── context/         # React context
+│   └── constants/       # Data constants
+├── CHANGELOG.md         # Version history
+└── README.md           # This file
+```
+
+## Customization
+
+### Update Personal Info
+Edit `src/constants/index.ts` to update:
+- Name, title, location
+- Social links (GitHub, LinkedIn, Email)
+- Skills and experience
+- Projects
+
+### Change Themes
+Edit `src/context/ThemeContext.tsx` to modify:
+- Color schemes
+- Theme names
+- Add new themes
+
+### Modify Backgrounds
+Edit `src/components/ui/HeroBackground.tsx` to customize:
+- Animation effects
+- Particle counts
+- Animation speeds
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Author
+
+**Chandan Kumar**
+- GitHub: [@cmschandan](https://github.com/cmschandan)
+- LinkedIn: [Chandan Kumar](https://linkedin.com/in/cmschandan)
+- Email: cmschandan10@gmail.com
+
+---
+
+Built with Next.js and deployed on Vercel
