@@ -165,7 +165,7 @@ This project is open source and available under the [MIT License](LICENSE).
 **Chandan Kumar**
 - GitHub: [@cmschandan](https://github.com/cmschandan)
 - LinkedIn: [Chandan Kumar](https://linkedin.com/in/cmschandan)
-- Email: cmschandan10@gmail.com
+- Email: zoomchandan28@gmail.com
 
 ---
 
