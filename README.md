@@ -2,7 +2,7 @@
 
 A modern, interactive portfolio website built with Next.js, featuring 3D elements, theme switching, and stunning animated backgrounds.
 
-![Portfolio Preview](public/images/preview.png)
+![Portfolio Preview](public/images/portfolio_preview.png)
 
 ## Features
 
