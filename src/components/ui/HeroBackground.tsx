@@ -22,7 +22,7 @@ interface Particle {
 export default function HeroBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { theme, colors } = useTheme();
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
   const particlesRef = useRef<Particle[]>([]);
 
   // Matrix characters for code rain effects
