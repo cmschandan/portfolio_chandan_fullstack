@@ -210,7 +210,6 @@ export default function HeroBackground() {
           break;
       }
 
-      animationRef.current = requestAnimationFrame(animate);
     };
 
     const animateMatrix = (ctx: CanvasRenderingContext2D, width: number, height: number, color: string) => {
@@ -514,11 +513,50 @@ export default function HeroBackground() {
       });
     };
 
+    // Skip animation if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      ctx.fillStyle = "rgba(10, 10, 15, 1)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      return () => window.removeEventListener("resize", resizeCanvas);
+    }
+
+    // FPS throttling - cap at 30fps
+    let lastFrameTime = 0;
+    const targetFPS = 30;
+    const frameInterval = 1000 / targetFPS;
+
+    const throttledAnimate = (timestamp: number) => {
+      animationRef.current = requestAnimationFrame(throttledAnimate);
+      const delta = timestamp - lastFrameTime;
+      if (delta < frameInterval) return;
+      lastFrameTime = timestamp - (delta % frameInterval);
+      animate();
+    };
+
+    // Pause animation when tab is not visible
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = null;
+        }
+      } else {
+        if (!animationRef.current) {
+          lastFrameTime = 0;
+          animationRef.current = requestAnimationFrame(throttledAnimate);
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     // Start animation
-    animate();
+    animationRef.current = requestAnimationFrame(throttledAnimate);
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }

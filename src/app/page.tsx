@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import Navbar from "@/components/ui/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
@@ -54,6 +54,18 @@ function LoadingScreen() {
   );
 }
 
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  return (
+    <motion.div
+      style={{ scaleX, transformOrigin: "0%" }}
+      className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#00d9ff] via-[#7c3aed] to-[#ff006e] z-[9999]"
+    />
+  );
+}
+
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -73,6 +85,9 @@ export default function Home() {
       </AnimatePresence>
 
       <main className="relative">
+        {/* Scroll Progress Bar */}
+        <ScrollProgress />
+
         {/* Background Grid */}
         <div className="fixed inset-0 grid-bg opacity-30 pointer-events-none" />
 

@@ -1,8 +1,37 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import { skills } from "@/constants";
+
+function AnimatedCounter({ value, isInView }: { value: number; isInView: boolean }) {
+  const [count, setCount] = useState(0);
+  const hasAnimated = useRef(false);
+
+  const animate = useCallback(() => {
+    if (hasAnimated.current) return;
+    hasAnimated.current = true;
+    const duration = 1500;
+    const steps = 60;
+    const increment = value / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= value) {
+        setCount(value);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, duration / steps);
+  }, [value]);
+
+  useEffect(() => {
+    if (isInView) animate();
+  }, [isInView, animate]);
+
+  return <>{count}</>;
+}
 
 const categoryIcons: Record<string, React.ReactNode> = {
   frontend: (
@@ -88,7 +117,7 @@ export default function Skills() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.3 + index * 0.1 }}
                 onClick={() => setActiveCategory(category)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium transition-all duration-300 ${
+                className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium transition-all duration-300 cursor-pointer ${
                   activeCategory === category
                     ? "bg-[#00d9ff] text-[#0a0a0f]"
                     : "bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white"
@@ -153,13 +182,13 @@ export default function Skills() {
               <div className="flex flex-wrap justify-center gap-8">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-[#00d9ff]">
-                    {Object.values(skills).flat().length}+
+                    <AnimatedCounter value={Object.values(skills).flat().length} isInView={isInView} />+
                   </div>
                   <div className="text-sm text-gray-400">Technologies</div>
                 </div>
                 <div className="w-px h-12 bg-gray-700" />
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-[#7c3aed]">7+</div>
+                  <div className="text-3xl font-bold text-[#7c3aed]"><AnimatedCounter value={7} isInView={isInView} />+</div>
                   <div className="text-sm text-gray-400">Years Coding</div>
                 </div>
                 <div className="w-px h-12 bg-gray-700" />

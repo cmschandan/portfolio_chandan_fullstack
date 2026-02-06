@@ -46,6 +46,12 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: {
+    canonical: "https://chandankumar.dev",
+  },
+  other: {
+    "theme-color": "#0a0a0f",
+  },
 };
 
 export default function RootLayout({
@@ -57,6 +63,29 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Chandan Kumar",
+              url: "https://chandankumar.dev",
+              jobTitle: "Senior Full Stack Developer",
+              worksFor: { "@type": "Organization", name: "Cyber Waves B.V" },
+              sameAs: [
+                "https://github.com/cmschandan",
+                "https://linkedin.com/in/hrefcoder",
+              ],
+              knowsAbout: ["Angular", "React", "Node.js", "AWS", "TypeScript", "Serverless"],
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Amsterdam",
+                addressCountry: "NL",
+              },
+            }),
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a0f] text-white`}

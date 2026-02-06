@@ -1,13 +1,30 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState, useMemo } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { projects } from "@/constants";
 
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [tappedId, setTappedId] = useState<number | null>(null);
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const isActive = (id: number) => hoveredId === id || tappedId === id;
+
+  const handleTap = (id: number) => {
+    setTappedId((prev) => (prev === id ? null : id));
+  };
+
+  const categories = useMemo(
+    () => ["All", ...Array.from(new Set(projects.map((p) => p.category)))],
+    []
+  );
+
+  const filteredProjects = activeFilter === "All"
+    ? projects
+    : projects.filter((p) => p.category === activeFilter);
 
   return (
     <section id="projects" className="section-padding relative overflow-hidden bg-[#0a0a0f]/50">
@@ -39,27 +56,54 @@ export default function Projects() {
             </p>
           </div>
 
+          {/* Category Filter */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {categories.map((category, index) => (
+              <motion.button
+                key={category}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.3 + index * 0.1 }}
+                onClick={() => setActiveFilter(category)}
+                className={`px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 cursor-pointer ${
+                  activeFilter === category
+                    ? "bg-[#00d9ff] text-[#0a0a0f]"
+                    : "bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                {category}
+              </motion.button>
+            ))}
+          </div>
+
           {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
+          <motion.div
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project, index) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.3 + index * 0.15 }}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                className="group relative"
+                onClick={() => handleTap(project.id)}
+                className="group relative cursor-pointer"
               >
                 <div
                   className={`glass-card overflow-hidden transition-all duration-500 ${
-                    hoveredId === project.id
+                    isActive(project.id)
                       ? "border-[#00d9ff]/50 shadow-lg shadow-[#00d9ff]/10 transform scale-[1.02]"
                       : ""
                   }`}
                   style={{
                     transform:
-                      hoveredId === project.id
+                      isActive(project.id)
                         ? "perspective(1000px) rotateX(2deg) rotateY(-2deg)"
                         : "perspective(1000px) rotateX(0) rotateY(0)",
                     transition: "all 0.3s ease",
@@ -76,7 +120,7 @@ export default function Projects() {
                     {/* Overlay on hover */}
                     <motion.div
                       initial={{ opacity: 0 }}
-                      animate={{ opacity: hoveredId === project.id ? 1 : 0 }}
+                      animate={{ opacity: isActive(project.id) ? 1 : 0 }}
                       className="absolute inset-0 bg-[#00d9ff]/10 z-20 flex items-center justify-center"
                     >
                       <div className="flex gap-4">
@@ -138,7 +182,8 @@ export default function Projects() {
                 </div>
               </motion.div>
             ))}
-          </div>
+            </AnimatePresence>
+          </motion.div>
 
           {/* View All Projects CTA */}
           <motion.div

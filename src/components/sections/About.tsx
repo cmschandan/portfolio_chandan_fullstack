@@ -1,9 +1,43 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { aboutData, personalInfo } from "@/constants";
+
+function AnimatedCounter({ value, isInView }: { value: string; isInView: boolean }) {
+  const match = value.match(/^(\d+)(.*)$/);
+  const [count, setCount] = useState(0);
+  const hasAnimated = useRef(false);
+
+  const target = match ? parseInt(match[1], 10) : 0;
+  const suffix = match ? match[2] : "";
+
+  const animate = useCallback(() => {
+    if (!match || hasAnimated.current) return;
+    hasAnimated.current = true;
+    const duration = 1500;
+    const steps = 60;
+    const increment = target / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, duration / steps);
+  }, [match, target]);
+
+  useEffect(() => {
+    if (isInView) animate();
+  }, [isInView, animate]);
+
+  if (!match) return <>{value}</>;
+  return <>{count}{suffix}</>;
+}
 
 export default function About() {
   const ref = useRef(null);
@@ -55,6 +89,7 @@ export default function About() {
                   className="relative w-48 h-48 mx-auto mb-6 cursor-pointer"
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
+                  onClick={() => setIsHovered((prev) => !prev)}
                 >
                   {/* Rotating Border */}
                   <motion.div
@@ -121,7 +156,7 @@ export default function About() {
                     animate={{ opacity: isHovered ? 0 : 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    Hover to reveal
+                    Tap or hover to reveal
                   </motion.p>
                 </div>
 
@@ -147,7 +182,9 @@ export default function About() {
                       transition={{ delay: 0.5 + index * 0.1 }}
                       className="text-center p-4 rounded-lg bg-[#00d9ff]/5 border border-[#00d9ff]/10"
                     >
-                      <div className="text-2xl font-bold text-[#00d9ff]">{stat.value}</div>
+                      <div className="text-2xl font-bold text-[#00d9ff]">
+                        <AnimatedCounter value={stat.value} isInView={isInView} />
+                      </div>
                       <div className="text-xs text-gray-400 mt-1">{stat.label}</div>
                     </motion.div>
                   ))}
