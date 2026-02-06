@@ -182,6 +182,112 @@ export default function HeroBackground() {
             });
           }
           break;
+
+        case "marvel": // Energy blast particles + flying sparks
+          // Central energy orbs
+          for (let i = 0; i < 8; i++) {
+            particlesRef.current.push({
+              x: width * 0.5 + (Math.random() - 0.5) * 200,
+              y: height * 0.5 + (Math.random() - 0.5) * 200,
+              speed: 1 + Math.random() * 2,
+              size: 20 + Math.random() * 40,
+              opacity: 0.4 + Math.random() * 0.4,
+              angle: Math.random() * Math.PI * 2,
+              vx: (Math.random() - 0.5) * 3,
+              vy: (Math.random() - 0.5) * 3,
+              life: Math.random() * 200,
+              maxLife: 200,
+            });
+          }
+          // Flying energy sparks
+          for (let i = 0; i < 120; i++) {
+            particlesRef.current.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              speed: 2 + Math.random() * 4,
+              size: 1 + Math.random() * 3,
+              opacity: 0.5 + Math.random() * 0.5,
+              angle: Math.random() * Math.PI * 2,
+              vx: (Math.random() - 0.5) * 4,
+              vy: (Math.random() - 0.5) * 4,
+              hue: Math.random() > 0.5 ? 0 : 45, // red or gold
+            });
+          }
+          break;
+
+        case "spiderman": // Web lines + floating particles
+          // Web anchor points
+          for (let i = 0; i < 12; i++) {
+            particlesRef.current.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              speed: 0.3 + Math.random() * 0.5,
+              size: 3,
+              opacity: 0.7,
+              angle: Math.random() * Math.PI * 2,
+              vx: (Math.random() - 0.5) * 1,
+              vy: (Math.random() - 0.5) * 1,
+              life: 0,
+              maxLife: 300 + Math.random() * 200,
+            });
+          }
+          // Floating dust/debris
+          for (let i = 0; i < 80; i++) {
+            particlesRef.current.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              speed: 0.3 + Math.random() * 0.8,
+              size: 1 + Math.random() * 2,
+              opacity: 0.2 + Math.random() * 0.4,
+              vx: (Math.random() - 0.5) * 0.5,
+              vy: Math.random() * 0.5,
+              hue: Math.random() > 0.6 ? 0 : 220, // red or blue
+            });
+          }
+          break;
+
+        case "hanuman": // Divine flames + rising sacred particles
+          // Sacred flames rising from bottom
+          for (let i = 0; i < 60; i++) {
+            particlesRef.current.push({
+              x: Math.random() * width,
+              y: height + Math.random() * 100,
+              speed: 1.5 + Math.random() * 3,
+              size: 4 + Math.random() * 10,
+              opacity: 0.4 + Math.random() * 0.5,
+              vx: (Math.random() - 0.5) * 2,
+              hue: Math.random() * 40, // orange to deep orange
+              life: Math.random() * 100,
+              maxLife: 100 + Math.random() * 100,
+            });
+          }
+          // Sacred golden orbs
+          for (let i = 0; i < 30; i++) {
+            particlesRef.current.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              speed: 0.5 + Math.random() * 1,
+              size: 2 + Math.random() * 5,
+              opacity: 0.3 + Math.random() * 0.5,
+              angle: Math.random() * Math.PI * 2,
+              vx: (Math.random() - 0.5) * 0.8,
+              vy: (Math.random() - 0.5) * 0.8,
+            });
+          }
+          // Trident sparks (rare bright flashes)
+          for (let i = 0; i < 5; i++) {
+            particlesRef.current.push({
+              x: Math.random() * width,
+              y: Math.random() * height * 0.5,
+              speed: 0,
+              size: 2,
+              opacity: 0,
+              life: Math.random() * 150,
+              maxLife: 150,
+              trail: [],
+            });
+          }
+          break;
       }
     };
 
@@ -207,6 +313,15 @@ export default function HeroBackground() {
           break;
         case "pink":
           animateBubbles(ctx, canvas.width, canvas.height, colors);
+          break;
+        case "marvel":
+          animateMarvel(ctx, canvas.width, canvas.height, colors);
+          break;
+        case "spiderman":
+          animateSpiderman(ctx, canvas.width, canvas.height, colors);
+          break;
+        case "hanuman":
+          animateHanuman(ctx, canvas.width, canvas.height, colors);
           break;
       }
 
@@ -511,6 +626,274 @@ export default function HeroBackground() {
           ctx.globalAlpha = 1;
         }
       });
+    };
+
+    const animateMarvel = (ctx: CanvasRenderingContext2D, width: number, height: number, colors: { primary: string; secondary: string; accent: string }) => {
+      ctx.fillStyle = "rgba(10, 10, 15, 0.08)";
+      ctx.fillRect(0, 0, width, height);
+
+      const time = Date.now() * 0.001;
+
+      particlesRef.current.forEach((particle) => {
+        if (particle.maxLife !== undefined) {
+          // Energy orbs — large pulsing circles
+          particle.life = (particle.life || 0) + 1;
+          if (particle.life > particle.maxLife) {
+            particle.life = 0;
+            particle.x = width * 0.5 + (Math.random() - 0.5) * 400;
+            particle.y = height * 0.5 + (Math.random() - 0.5) * 400;
+          }
+          particle.x += particle.vx || 0;
+          particle.y += particle.vy || 0;
+          // Bounce off edges
+          if (particle.x < 0 || particle.x > width) particle.vx = -(particle.vx || 0);
+          if (particle.y < 0 || particle.y > height) particle.vy = -(particle.vy || 0);
+
+          const pulse = Math.sin(time * 2 + (particle.life || 0) * 0.05) * 0.3 + 0.7;
+          const grad = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, particle.size * pulse);
+          grad.addColorStop(0, `${colors.primary}40`);
+          grad.addColorStop(0.5, `${colors.secondary}20`);
+          grad.addColorStop(1, "transparent");
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size * pulse, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // Flying energy sparks
+          particle.x += particle.vx || 0;
+          particle.y += particle.vy || 0;
+          particle.opacity *= 0.995;
+
+          if (particle.x < 0 || particle.x > width || particle.y < 0 || particle.y > height || particle.opacity < 0.1) {
+            particle.x = Math.random() * width;
+            particle.y = Math.random() * height;
+            particle.vx = (Math.random() - 0.5) * 4;
+            particle.vy = (Math.random() - 0.5) * 4;
+            particle.opacity = 0.5 + Math.random() * 0.5;
+          }
+
+          const sparkColor = (particle.hue || 0) > 20 ? colors.secondary : colors.primary;
+          ctx.fillStyle = sparkColor;
+          ctx.globalAlpha = particle.opacity;
+          ctx.shadowColor = sparkColor;
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      // Pulsing energy ring in center
+      const ringPulse = Math.sin(time * 1.5) * 0.3 + 0.7;
+      ctx.strokeStyle = `${colors.primary}30`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(width * 0.5, height * 0.5, 150 * ringPulse, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = `${colors.secondary}20`;
+      ctx.beginPath();
+      ctx.arc(width * 0.5, height * 0.5, 250 * ringPulse, 0, Math.PI * 2);
+      ctx.stroke();
+    };
+
+    const animateSpiderman = (ctx: CanvasRenderingContext2D, width: number, height: number, colors: { primary: string; secondary: string }) => {
+      ctx.fillStyle = "rgba(10, 10, 15, 0.06)";
+      ctx.fillRect(0, 0, width, height);
+
+      const time = Date.now() * 0.001;
+      const anchors: { x: number; y: number }[] = [];
+
+      particlesRef.current.forEach((particle) => {
+        if (particle.maxLife !== undefined) {
+          // Web anchor points — move slowly, track position
+          particle.life = (particle.life || 0) + 1;
+          particle.x += particle.vx || 0;
+          particle.y += particle.vy || 0;
+
+          if (particle.x < 0 || particle.x > width) particle.vx = -(particle.vx || 0);
+          if (particle.y < 0 || particle.y > height) particle.vy = -(particle.vy || 0);
+
+          if (particle.life > particle.maxLife) {
+            particle.life = 0;
+            particle.x = Math.random() * width;
+            particle.y = Math.random() * height;
+          }
+
+          anchors.push({ x: particle.x, y: particle.y });
+
+          // Draw anchor glow
+          ctx.fillStyle = colors.primary;
+          ctx.globalAlpha = 0.6;
+          ctx.shadowColor = colors.primary;
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 1;
+        } else {
+          // Floating debris
+          particle.x += particle.vx || 0;
+          particle.y += particle.vy || 0;
+          if (particle.y > height) { particle.y = -10; particle.x = Math.random() * width; }
+          if (particle.x < 0) particle.x = width;
+          if (particle.x > width) particle.x = 0;
+
+          const col = (particle.hue || 0) > 100 ? colors.secondary : colors.primary;
+          ctx.fillStyle = col;
+          ctx.globalAlpha = particle.opacity;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      // Draw web lines between nearby anchors
+      ctx.strokeStyle = `${colors.primary}25`;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < anchors.length; i++) {
+        for (let j = i + 1; j < anchors.length; j++) {
+          const dx = anchors[i].x - anchors[j].x;
+          const dy = anchors[i].y - anchors[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 350) {
+            const alpha = Math.floor((1 - dist / 350) * 60);
+            ctx.strokeStyle = `${colors.primary}${alpha.toString(16).padStart(2, "0")}`;
+            ctx.beginPath();
+            ctx.moveTo(anchors[i].x, anchors[i].y);
+            // Curved web line using quadratic bezier
+            const midX = (anchors[i].x + anchors[j].x) / 2 + Math.sin(time + i) * 20;
+            const midY = (anchors[i].y + anchors[j].y) / 2 + Math.cos(time + j) * 20;
+            ctx.quadraticCurveTo(midX, midY, anchors[j].x, anchors[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Radial web pattern from center (subtle)
+      const cx = width * 0.5;
+      const cy = height * 0.5;
+      ctx.strokeStyle = `${colors.secondary}10`;
+      ctx.lineWidth = 0.5;
+      for (let ring = 1; ring <= 5; ring++) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, ring * 80, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      for (let spoke = 0; spoke < 12; spoke++) {
+        const angle = (spoke / 12) * Math.PI * 2 + time * 0.1;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(angle) * 400, cy + Math.sin(angle) * 400);
+        ctx.stroke();
+      }
+    };
+
+    const animateHanuman = (ctx: CanvasRenderingContext2D, width: number, height: number, colors: { primary: string; secondary: string; accent: string }) => {
+      ctx.fillStyle = "rgba(10, 10, 15, 0.06)";
+      ctx.fillRect(0, 0, width, height);
+
+      const time = Date.now() * 0.001;
+
+      particlesRef.current.forEach((particle, index) => {
+        if (particle.trail !== undefined) {
+          // Trident sparks — rare bright flashes
+          particle.life = (particle.life || 0) + 1;
+          if (particle.life > (particle.maxLife || 150)) {
+            particle.life = 0;
+            particle.x = Math.random() * width;
+            particle.y = Math.random() * height * 0.6;
+          }
+          const phase = ((particle.life || 0) / (particle.maxLife || 150)) * Math.PI;
+          const flashOpacity = Math.sin(phase);
+          if (flashOpacity > 0.5) {
+            // Draw cross/trident flash
+            const s = 15 * flashOpacity;
+            ctx.strokeStyle = colors.secondary;
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = flashOpacity * 0.8;
+            ctx.shadowColor = colors.secondary;
+            ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.moveTo(particle.x - s, particle.y);
+            ctx.lineTo(particle.x + s, particle.y);
+            ctx.moveTo(particle.x, particle.y - s * 1.5);
+            ctx.lineTo(particle.x, particle.y + s);
+            ctx.stroke();
+            // Trident prongs
+            ctx.beginPath();
+            ctx.moveTo(particle.x - s * 0.5, particle.y - s * 1.2);
+            ctx.lineTo(particle.x - s * 0.5, particle.y - s * 0.5);
+            ctx.moveTo(particle.x + s * 0.5, particle.y - s * 1.2);
+            ctx.lineTo(particle.x + s * 0.5, particle.y - s * 0.5);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 1;
+          }
+        } else if (particle.maxLife !== undefined) {
+          // Sacred flames — rising from bottom
+          particle.life = (particle.life || 0) + 1;
+          particle.y -= particle.speed;
+          particle.x += Math.sin(time * 2 + index) * 0.8 + (particle.vx || 0) * 0.3;
+          particle.size *= 0.997;
+          particle.opacity *= 0.998;
+
+          if (particle.y < -50 || particle.opacity < 0.05 || particle.life > particle.maxLife) {
+            particle.y = height + Math.random() * 50;
+            particle.x = Math.random() * width;
+            particle.size = 4 + Math.random() * 10;
+            particle.opacity = 0.4 + Math.random() * 0.5;
+            particle.life = 0;
+          }
+
+          const hueOff = particle.hue || 0;
+          const flameColor = `hsl(${25 + hueOff}, 100%, ${50 + Math.sin(time * 3 + index) * 15}%)`;
+          ctx.fillStyle = flameColor;
+          ctx.globalAlpha = particle.opacity;
+          ctx.shadowColor = colors.primary;
+          ctx.shadowBlur = 20;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 1;
+        } else {
+          // Sacred golden orbs — floating serenely
+          particle.angle = (particle.angle || 0) + 0.008;
+          particle.x += Math.sin(particle.angle + index) * 0.5 + (particle.vx || 0);
+          particle.y += Math.cos(particle.angle + index) * 0.5 + (particle.vy || 0);
+
+          if (particle.x < 0) particle.x = width;
+          if (particle.x > width) particle.x = 0;
+          if (particle.y < 0) particle.y = height;
+          if (particle.y > height) particle.y = 0;
+
+          const glow = Math.sin(particle.angle * 2 + index) * 0.3 + 0.7;
+          ctx.fillStyle = colors.secondary;
+          ctx.globalAlpha = particle.opacity * glow;
+          ctx.shadowColor = colors.secondary;
+          ctx.shadowBlur = 15;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      // Sacred aura ring at bottom center
+      const auraY = height * 0.85;
+      const auraX = width * 0.5;
+      const auraPulse = Math.sin(time) * 0.2 + 0.8;
+      const auraGrad = ctx.createRadialGradient(auraX, auraY, 0, auraX, auraY, 300 * auraPulse);
+      auraGrad.addColorStop(0, `${colors.primary}15`);
+      auraGrad.addColorStop(0.4, `${colors.secondary}08`);
+      auraGrad.addColorStop(1, "transparent");
+      ctx.fillStyle = auraGrad;
+      ctx.fillRect(0, 0, width, height);
     };
 
     // Skip animation if user prefers reduced motion

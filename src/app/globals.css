@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 :root {
   --background: #0a0a0f;
@@ -407,6 +408,24 @@ a, button, [role="button"], .clickable {
   .pulse-glow {
     animation: none !important;
   }
+}
+
+/* Leaflet dark popup theme */
+.dark-popup .leaflet-popup-content-wrapper {
+  background: rgba(15, 15, 25, 0.95);
+  color: #e5e7eb;
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.1);
+}
+
+.dark-popup .leaflet-popup-tip {
+  background: rgba(15, 15, 25, 0.95);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+.leaflet-container {
+  background: #0d1117 !important;
 }
 
 /* Responsive adjustments */

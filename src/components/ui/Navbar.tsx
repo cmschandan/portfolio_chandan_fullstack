@@ -98,16 +98,14 @@ export default function Navbar() {
             {/* Theme Switcher */}
             <ThemeSwitcher />
 
-            <motion.a
-              href={personalInfo.resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <motion.button
+              onClick={() => window.dispatchEvent(new Event("open-resume-viewer"))}
               className="ml-2 glow-btn text-sm"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Resume
-            </motion.a>
+            </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -162,17 +160,18 @@ export default function Navbar() {
                   {link.title}
                 </motion.button>
               ))}
-              <motion.a
+              <motion.button
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navLinks.length * 0.1 }}
-                href={personalInfo.resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={() => {
+                  setIsOpen(false);
+                  setTimeout(() => window.dispatchEvent(new Event("open-resume-viewer")), 350);
+                }}
                 className="block w-full text-center glow-btn mt-4"
               >
-                Download Resume
-              </motion.a>
+                View Resume
+              </motion.button>
             </div>
           </motion.div>
         )}

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-export type ThemeName = "cyan" | "purple" | "green" | "orange" | "pink";
+export type ThemeName = "cyan" | "purple" | "green" | "orange" | "pink" | "marvel" | "spiderman" | "hanuman";
 
 interface ThemeColors {
   primary: string;
@@ -48,6 +48,27 @@ export const themes: Record<ThemeName, ThemeColors> = {
     accent: "#f43f5e",
     glow: "rgba(236, 72, 153, 0.5)",
   },
+  marvel: {
+    primary: "#e23636",
+    primaryDark: "#b71c1c",
+    secondary: "#ffd700",
+    accent: "#1e3a5f",
+    glow: "rgba(226, 54, 54, 0.5)",
+  },
+  spiderman: {
+    primary: "#e21b1b",
+    primaryDark: "#b71c1c",
+    secondary: "#1565c0",
+    accent: "#ffffff",
+    glow: "rgba(226, 27, 27, 0.5)",
+  },
+  hanuman: {
+    primary: "#ff6f00",
+    primaryDark: "#e65100",
+    secondary: "#ffd54f",
+    accent: "#d50000",
+    glow: "rgba(255, 111, 0, 0.6)",
+  },
 };
 
 export const themeInfo: Record<ThemeName, { name: string; icon: string; effect: string }> = {
@@ -56,6 +77,9 @@ export const themeInfo: Record<ThemeName, { name: string; icon: string; effect: 
   green: { name: "Matrix Green", icon: "🌿", effect: "Matrix Rain" },
   orange: { name: "Sunset Orange", icon: "🌅", effect: "Sun Rays" },
   pink: { name: "Neon Pink", icon: "🌸", effect: "Sparkles" },
+  marvel: { name: "Marvel", icon: "🦸", effect: "Energy Blast" },
+  spiderman: { name: "Spider-Man", icon: "🕷️", effect: "Web Sling" },
+  hanuman: { name: "Lord Hanuman", icon: "🔱", effect: "Divine Flames" },
 };
 
 interface ThemeContextType {

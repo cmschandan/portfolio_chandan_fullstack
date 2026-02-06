@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import Navbar from "@/components/ui/Navbar";
 import Hero from "@/components/sections/Hero";
@@ -10,6 +10,8 @@ import Experience from "@/components/sections/Experience";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
+import ResumeViewer from "@/components/ui/ResumeViewer";
+import CursorGlow from "@/components/ui/CursorGlow";
 
 function LoadingScreen() {
   return (
@@ -68,6 +70,9 @@ function ScrollProgress() {
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+
+  const openResume = useCallback(() => setIsResumeOpen(true), []);
 
   useEffect(() => {
     // Simulate loading time for 3D assets
@@ -78,11 +83,23 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Listen for custom event from any component
+  useEffect(() => {
+    window.addEventListener("open-resume-viewer", openResume);
+    return () => window.removeEventListener("open-resume-viewer", openResume);
+  }, [openResume]);
+
   return (
     <>
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen />}
       </AnimatePresence>
+
+      {/* Resume PDF Viewer Modal */}
+      <ResumeViewer isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
+
+      {/* Cursor Glow Effect (desktop only) */}
+      <CursorGlow />
 
       <main className="relative">
         {/* Scroll Progress Bar */}

@@ -118,16 +118,14 @@ export default function Hero() {
             >
               View My Work
             </motion.button>
-            <motion.a
-              href={personalInfo.resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <motion.button
+              onClick={() => window.dispatchEvent(new Event("open-resume-viewer"))}
               className="outline-btn text-lg px-8 py-4"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Download Resume
-            </motion.a>
+              View Resume
+            </motion.button>
           </motion.div>
 
           {/* Social Links */}

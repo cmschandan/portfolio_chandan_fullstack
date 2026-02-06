@@ -4,6 +4,21 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { aboutData, personalInfo } from "@/constants";
+import dynamic from "next/dynamic";
+
+const JourneyMap = dynamic(() => import("@/components/ui/JourneyMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="glass-card p-6 mb-8">
+      <div className="w-full h-48 rounded-lg bg-[#0d1117] animate-pulse mb-4" />
+      <div className="space-y-2">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-12 bg-white/5 rounded-lg animate-pulse" />
+        ))}
+      </div>
+    </div>
+  ),
+});
 
 function AnimatedCounter({ value, isInView }: { value: string; isInView: boolean }) {
   const match = value.match(/^(\d+)(.*)$/);
@@ -209,45 +224,8 @@ export default function About() {
                 </p>
               </div>
 
-              {/* Journey Locations */}
-              <div className="glass-card p-6 mb-8">
-                <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-[#00d9ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  My Journey
-                </h4>
-                <div className="space-y-3">
-                  {aboutData.locations.map((location, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : {}}
-                      transition={{ delay: 0.6 + index * 0.1 }}
-                      className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
-                        location.current
-                          ? "bg-[#00d9ff]/10 border border-[#00d9ff]/30"
-                          : "bg-white/5 hover:bg-white/10"
-                      }`}
-                    >
-                      <div
-                        className={`w-3 h-3 rounded-full ${
-                          location.current ? "bg-[#00d9ff] pulse-glow" : "bg-gray-500"
-                        }`}
-                      />
-                      <div className="flex-1">
-                        <span className="text-white font-medium">{location.name}</span>
-                        <span className="text-gray-400">, {location.country}</span>
-                      </div>
-                      {location.current && (
-                        <span className="text-xs text-[#00d9ff] bg-[#00d9ff]/10 px-2 py-1 rounded-full">
-                          Current
-                        </span>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+              {/* Journey Map & Locations */}
+              <JourneyMap />
 
               {/* Contact CTA */}
               <motion.a
